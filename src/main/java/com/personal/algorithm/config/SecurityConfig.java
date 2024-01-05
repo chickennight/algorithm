@@ -8,9 +8,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -35,21 +37,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic().disable();
-        http
-                .httpBasic().disable()//Rest api 사용을 위해 기본설정 해제
-                .csrf().disable()
-                .cors().and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //토큰기반 인증이므로 세션 사용 안함
-                .headers().frameOptions().disable().and()
-                .authorizeRequests()//요청에 대한 권한 체크
-                .antMatchers("/admin/register", "/admin/login").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/order/analysis/day","/order/analysis/region","/order/now").hasRole("ADMIN")
-                .anyRequest().permitAll().and()//그 외 요청은 누구나 접근 가능
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .formLogin(AbstractHttpConfigurer::disable);
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeRequests((authz) -> authz.antMatchers("/admin/register", "/admin/login").permitAll().antMatchers("/admin/**").hasRole("ADMIN").anyRequest().authenticated()).addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
