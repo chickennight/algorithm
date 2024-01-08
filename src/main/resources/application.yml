@@ -32,5 +32,5 @@ spring:
 
 # JWT 키값
 jwt:
-  secretKey: thisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkey
-  refreshKey: thisisrefreshkeythisisrefreshkeythisisrefreshkeythisisrefreshkeythisisrefreshkeythisisrefreshkeythisisrefreshkey
+  secretKey: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
+  refreshKey: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
