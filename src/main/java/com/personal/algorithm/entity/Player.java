@@ -2,7 +2,6 @@ package com.personal.algorithm.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -35,11 +34,12 @@ public class Player {
     @ColumnDefault("false")
     private boolean isAdmin;
 
-    public Player(String playerId, String password, String nickName, String phoneNumber) {
+    public Player(String playerId, String password, String nickName, String phoneNumber, boolean isAdmin) {
         this.playerId = playerId;
         this.password = password;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
+        this.isAdmin = isAdmin;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
